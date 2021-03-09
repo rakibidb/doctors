@@ -13,13 +13,18 @@ class Mail extends StatelessWidget {
         backgroundColor: Colors.red,
       ),
       body: Center(
-        child: RaisedButton(
-          color: Colors.red,
-          textColor: Colors.white,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text(this.no+ ' Go back!'),
+        child: Column(
+          children: [
+            Text(this.no,style: TextStyle(fontSize: 35),),
+            RaisedButton(
+              color: Colors.red,
+              textColor: Colors.white,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(' Go back!'),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(

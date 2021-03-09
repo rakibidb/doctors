@@ -34,7 +34,47 @@ class MyApp extends StatelessWidget {
           title: Text(title),
           backgroundColor: Colors.green,
         ),
-        body: _getTasks(),
+        body: Container(
+          child: GridView.count(
+            crossAxisCount: 2, reverse: false,
+            // Generate 100 widgets that display their index in the List.
+            children: List.generate(10, (index) {
+              return Center(
+                child: Column(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height / 6,
+                      width: MediaQuery.of(context).size.width / 3,
+                      color: Colors.red[500],
+                      child: ListTile(
+                        title: Text(
+                          '$index',
+                          style: TextStyle(fontSize: 40),
+                        ),
+                        subtitle:  Text(
+                          '$index',
+                          style: TextStyle(fontSize: 40),
+                        ),
+                        trailing: Icon(
+                          Icons.chevron_right,
+                          size: 35,
+                          color: Colors.white,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Profile('$index')),
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }),
+          ),
+        ),
         //
         // GridView.count(
         //   crossAxisCount: 2, reverse: true,
@@ -82,23 +122,7 @@ class MyApp extends StatelessWidget {
         //     );
         //   }),
         // ),
-        drawer: Drawer(
-          child: Column(
-            children: [
-              Text('rakib'),
-              Text('rakib'),
-              Text('rakib'),
-              Text('rakib'),
-              Text('rakib'),
-              Text('rakib'),
-              Text('rakib'),
-              Text('rakib'),
-              Text('rakib'),
-              Text('rakib'),
-              Text('rakib'),
-            ],
-          ),
-        ),
+        drawer: Drawer(child: _getTasks()),
 
         /*drawer: Drawer(
           child: GridView.count(
@@ -171,7 +195,6 @@ class MyApp extends StatelessWidget {
           return ListTile(
             title: Text('T #$index'),
             leading: Icon(Icons.thumb_up),
-
           );
         });
   }
@@ -184,22 +207,30 @@ class MyApp extends StatelessWidget {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
-            return GridView.count(crossAxisCount: 1, children: [
-              ListView.builder(
-                padding: const EdgeInsets.all(10.0),
+            return SafeArea(
+              child: ListView.builder(
                 itemBuilder: (BuildContext context, int index) => Center(
                   child: Container(
-                    height: 100,
-                    width: MediaQuery.of(context).size.width - 20,
-                    color: Colors.green[300],
+                    height: 70,
                     child: ListTile(
-                      leading: Icon(Icons.label),
-                      title: Text( snapshot.data.documents[index]['content'],style: TextStyle(fontSize: 30.0),),
-                      onTap: (){
+                      leading: Icon(
+                        Icons.category,
+                        color: Colors.green[900],
+                      ),
+                      title: Text(
+                        snapshot.data.documents[index]['content'],
+                        style:
+                            TextStyle(fontSize: 30.0, color: Colors.green[900]),
+                      ),
+                      trailing: Icon(Icons.send),
+                      tileColor: Colors.green[300],
+                      selectedTileColor: Colors.yellow,
+                      onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Profile(snapshot.data.documents[index]['content'])),
+                              builder: (context) => Profile(
+                                  snapshot.data.documents[index]['content'])),
                         );
                       },
                     ),
@@ -207,9 +238,9 @@ class MyApp extends StatelessWidget {
                 ),
                 itemCount: snapshot.data.documents.length,
               ),
-            ]);
+            );
           } else {
-            return Container();
+            return Text('nothing');
           }
         });
   }
@@ -251,32 +282,42 @@ class Profile extends StatelessWidget {
         title: Text("Profile Route"),
         backgroundColor: Colors.green,
       ),
-      body: Column(
-        children: [
-          Text(this.no + ' ', style: TextStyle(fontSize: 40),),
-          RaisedButton(
-            color: Colors.red,
-            textColor: Colors.white,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Mail(this.no + ' rakib')),
-              );
-            }, // display here
-            child: Text(' Mail page'), //this.no +
-          ),
-          RaisedButton(
-            color: Colors.green,
-            textColor: Colors.white,
-            onPressed: () {
-              Navigator.pop(context);
-            }, // display here
-            child: Text( ' Go back!'), //this.no +
-          ),
-        ],
+      body: Center(
+        child: Column(
+          children: [
+            Text(
+              this.no + ' ',
+              style: TextStyle(fontSize: 40),
+            ),
+            RaisedButton(
+              color: Colors.red,
+              textColor: Colors.white,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Mail(this.no)),
+                );
+              }, // display here
+              child: Text(' Mail page'), //this.no +
+            ),
+            RaisedButton(
+              color: Colors.green,
+              textColor: Colors.white,
+              onPressed: () {
+                Navigator.pop(context);
+              }, // display here
+              child: Text(' Go back!'), //this.no +
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(
+          Icons.add,
+          size: 35,
+        ),
+      ),
     );
   }
 }
