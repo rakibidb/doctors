@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Mail.dart';
@@ -23,7 +22,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   static final Firestore _db = Firestore.instance;
-
   @override
   Widget build(BuildContext context) {
     final title = 'Global message';
@@ -35,7 +33,6 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: Text(title),
           backgroundColor: Colors.green,
-
         ),
         body: _getTasks(),
         //
@@ -85,6 +82,23 @@ class MyApp extends StatelessWidget {
         //     );
         //   }),
         // ),
+        drawer: Drawer(
+          child: Column(
+            children: [
+              Text('rakib'),
+              Text('rakib'),
+              Text('rakib'),
+              Text('rakib'),
+              Text('rakib'),
+              Text('rakib'),
+              Text('rakib'),
+              Text('rakib'),
+              Text('rakib'),
+              Text('rakib'),
+              Text('rakib'),
+            ],
+          ),
+        ),
 
         /*drawer: Drawer(
           child: GridView.count(
@@ -133,22 +147,41 @@ class MyApp extends StatelessWidget {
             }),
           ),
         ),*/
-        floatingActionButton: FloatingActionButton(splashColor: Colors.green,
-          backgroundColor: Colors.red,
 
+        floatingActionButton: FloatingActionButton(
+          splashColor: Colors.green,
+          backgroundColor: Colors.red,
           onPressed: () {
             _displayDialog(context);
           },
-          child: Icon(Icons.add,size: 45,),
+          child: Icon(
+            Icons.add,
+            size: 45,
+          ),
           tooltip: 'Add Doctors',
         ),
       ),
     );
   }
 
+  ListView _buildListView() {
+    return ListView.builder(
+        itemCount: 10,
+        itemBuilder: (_, index) {
+          return ListTile(
+            title: Text('T #$index'),
+            leading: Icon(Icons.thumb_up),
+
+          );
+        });
+  }
+
   Widget _getTasks() {
     return StreamBuilder(
-        stream: Firestore.instance.collection('doctors').orderBy('timestamp', descending: true).snapshots(),
+        stream: Firestore.instance
+            .collection('doctors')
+            .orderBy('timestamp', descending: true)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
             return GridView.count(crossAxisCount: 1, children: [
@@ -156,23 +189,19 @@ class MyApp extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 itemBuilder: (BuildContext context, int index) => Center(
                   child: Container(
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                                height: 50,
-                                width: MediaQuery.of(context).size.width-20,
-                                color: Colors.green[300],
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      snapshot.data.documents[index]['content'], style: TextStyle(fontSize: 30.0),),
-                                )),
-
-                          ],
-                        ),
-                      ],
+                    height: 100,
+                    width: MediaQuery.of(context).size.width - 20,
+                    color: Colors.green[300],
+                    child: ListTile(
+                      leading: Icon(Icons.label),
+                      title: Text( snapshot.data.documents[index]['content'],style: TextStyle(fontSize: 30.0),),
+                      onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Profile(snapshot.data.documents[index]['content'])),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -218,23 +247,24 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: Text("Profile Route"),
         backgroundColor: Colors.green,
       ),
       body: Column(
         children: [
+          Text(this.no + ' ', style: TextStyle(fontSize: 40),),
           RaisedButton(
             color: Colors.red,
             textColor: Colors.white,
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Mail(this.no+' rakib')),
+                MaterialPageRoute(
+                    builder: (context) => Mail(this.no + ' rakib')),
               );
             }, // display here
-            child: Text(this.no + ' Mail page'),
+            child: Text(' Mail page'), //this.no +
           ),
           RaisedButton(
             color: Colors.green,
@@ -242,7 +272,7 @@ class Profile extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             }, // display here
-            child: Text(this.no + ' Go back!'),
+            child: Text( ' Go back!'), //this.no +
           ),
         ],
       ),
